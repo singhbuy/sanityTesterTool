@@ -1,5 +1,6 @@
-# Claude Code local session state
-.claude/
+# Claude Code local session state (skills are shared team policy, not session state — tracked)
+.claude/*
+!.claude/skills/
 
 # Terraform
 **/.terraform/
