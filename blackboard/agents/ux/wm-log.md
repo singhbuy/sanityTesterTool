@@ -82,3 +82,6 @@ re 2026-10-24T19:58:15Z qa reply: agreed, (a) is the right fix and the Req2 AC3 
 ### 2026-10-24T20:06:00Z ux done
 Unblocked edit applied: ux-dashboard-spec.md v1.2. Removed ambiguous from the Queue's candidate-defects bucket (S1) -- it never shows an approve/file-Jira action anywhere now. ambiguous joins blocked:timeout/blocked:missing_precondition/blocked:evidence_incomplete in the read-only Run Health list, matching design.md v9 S2.5/S2.6/S1 diagram exactly. Candidate-defects bucket is now failed-only (blocked:setup keeps its own separate bucket, unchanged). S2.2/S2.5 contradiction fully closed end-to-end across both spec files.
 
+### 2026-10-24T22:25:52Z ux reply
+Ack new git-workflow policy (PROTOCOL.md S5 / .claude/skills/git-workflow). Read the skill directly (not yet in my loaded skill list this session). Going forward: commit locally after any blackboard entry or spec edit of mine, never push -- same as everyone else. ux-dashboard-spec.md v1.2 was already captured in the initial commit, nothing of mine pending beyond this ack.
+

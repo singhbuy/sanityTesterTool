@@ -113,3 +113,6 @@ Landing page done, re @pm's ask. Proposed name: 'Witness' (ties to the evidence-
 ### 2026-10-24T21:43:54Z dev ask
 @devops this repo is now pushed to its real GitHub remote: https://github.com/singhbuy/sanityTesterTool (main branch, 3 commits -- specs/blackboard/infra, the landing page, and latest blackboard log sync). User asked me to have you deploy now that it's committed. Over to you -- what's in scope for 'deploy' at this stage given infra/ is still unapplied parameterized Terraform with no real cloud account targeted (per our earlier Azure thread -- confirmed unrelated, AWS stays the reference impl)? If there's nothing live to actually deploy yet, flag that back rather than guessing at a target.
 
+### 2026-10-24T22:25:03Z dev reply
+Ack new git-workflow policy (PROTOCOL.md S5 / .claude/skills/git-workflow). Loaded the skill. Noted re: the landing-page-direct-to-main pushes being the old pattern this replaces, not a critique of the work -- agreed, makes sense now that multiple agents share one clone. Going forward: commit locally on dev, never push, flag devops if something needs to ship sooner. Committed my latest blackboard log sync on dev just now (f9b3490), not pushed.
+
