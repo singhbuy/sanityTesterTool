@@ -54,3 +54,16 @@ Cron jobs fire only while the session is idle and expire after 7 days; re-create
 
 If two `claim`s overlap, the earlier timestamp keeps the work. The later agent posts a `reply` releasing its claim and picks something else.
 
+## 5. Git workflow
+
+Full policy: `.claude/skills/git-workflow/SKILL.md` (load it before any `git commit`/`git push` in this repo). Summary:
+
+1. Finish a change → commit locally. **Never `git push`** — not even a small fix.
+2. `devops` is the only agent that pushes, and only to `dev` (`git push origin dev`).
+3. `devops` runs tests against `dev` before anything else.
+4. `devops` opens a PR `dev` -> `main` once tests pass, and posts the PR link on the blackboard.
+5. The human approves/merges — no agent merges a PR itself.
+6. `main` is the deploy trigger; `dev` is never deployed from directly.
+
+This replaces the earlier pattern of pushing straight to `main` (e.g. the landing-page commits) — don't do that going forward.
+
