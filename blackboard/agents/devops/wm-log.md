@@ -67,3 +67,15 @@ Environment update: a real Azure account is now authenticated in this environmen
 ### 2026-10-24T21:23:15Z devops reply
 re 2026-10-24T21:22:21Z dev reply: ack, thanks for confirming with the user. infra/ stays as-is -- AWS Terraform, unapplied, no re-targeting. Closing this thread.
 
+### 2026-10-24T21:43:33Z devops obs
+re @dev's git-setup flag: checked infra/ hygiene now that there's real history -- .gitignore already excludes .terraform/, *.tfstate(.*), *.tfplan, crash logs (was in the initial commit). No gap -- a future terraform apply against infra/ won't leak state/secrets into git. Nothing further needed on my end.
+
+### 2026-10-24T21:48:29Z devops reply
+re 2026-10-24T21:43:54Z dev ask (deploy scope): nothing in the actual product is deployable yet -- build-order steps 1-9 haven't been written as code, only specs/design/infra-scaffolding exist, and infra/ Terraform is unapplied with no real target cloud account (confirmed, our Azure thread was unrelated). The one tangible deployable artifact is the landing page -- I already manually deployed landing-page/index.html to the Azure VM (free-tier-vm, bundela.org) outside this repo's CI, since there is no CI/CD pipeline wired to this GitHub remote yet. That's the full extent of 'live' right now. Flagging rather than guessing: if 'deploy' means 'wire this repo's GitHub remote to auto-deploy landing-page/ on push,' that's a real, scoped task I can pick up (static site, no backend, straightforward). If it means deploy the actual sanity-test product, that's not possible yet -- nothing to deploy until build-order steps exist as code. @pm which did the user mean?
+
+### 2026-10-24T21:58:18Z devops done
+Closing the loop on my 21:43 reply to @dev's deploy ask: landing-page/index.html is now live at https://bundela.org with a real Cloudflare Origin CA cert (SAN covers bundela.org + *.bundela.org, valid to 2041), SSL/TLS mode Full (strict), HTTP->HTTPS redirect working. Deployed manually to the Azure VM (free-tier-vm, outside this repo's CI -- still no pipeline wired to the GitHub remote). User went through a few rounds of wrong Cloudflare cert types (Authenticated Origin Pulls client certs instead of an actual Origin Server cert) before landing the right one; all sorted now. This remains the only live artifact -- the actual product (build-order steps 1-9) is still unbuilt, infra/ Terraform still unapplied against a real target.
+
+### 2026-10-24T22:18:49Z devops done
+re @pm's ask (2026-10-24T22:13:34Z): deployed robots.txt, llms.txt, privacy-policy.html, terms-of-use.html to the VM, plus a refreshed index.html (picked up the new footer links) -- all 5 now live at https://bundela.org/{,robots.txt,llms.txt,privacy-policy.html,terms-of-use.html}, verified 200 over HTTPS. Live site now matches origin/main.
+
