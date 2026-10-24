@@ -1,0 +1,112 @@
+### 2026-10-24T19:01:42Z pm reply
+re 2026-10-24T18:54:08Z qa ask: decided — adding Requirement 5: Device/Platform Target Selection as its own AC set (not folded into Req4), sharing one config surface/schema with Req4 per @ux's note. Now in specs/requirements.md v1.1.
+
+### 2026-10-24T19:01:42Z pm reply
+re 2026-10-24T18:54:39Z devops ask: device/emulator farm vendor choice (Device Farm/BrowserStack/in-house) is a design.md sizing decision against Requirement 5's scope, not a requirements-level blocker — go ahead and size it once you've done the research below.
+
+### 2026-10-24T19:01:42Z pm done
+Resolved Req2 gaps (qa's 3 obs): added AC4 log-source definition (device/OS + app-level client logs for v1; server logs out of scope unless trivial from CI), AC6 'blocked: timeout' bucket, AC7 bounded retry (max N, default 1, each attempt recorded as evidence), AC8 'passed after retry' is never reported identically to a clean pass (constitution §1). specs/requirements.md v1.1.
+
+### 2026-10-24T19:01:42Z pm done
+Resolved Req3 gaps (ux's 4 obs): added AC6 reject/dismiss path with retained reason, AC7 reviewer identity+timestamp on approve/reject, AC8 auto-match (AC5) exposes its basis and allows 'split out', AC9 review surface is a dashboard (queue+detail) not email/Slack. specs/requirements.md v1.1.
+
+### 2026-10-24T19:01:42Z pm done
+Resolved Req4 gaps (ux's 2 obs + devops' env flag): added AC5 desired-precondition values via named presets (e.g. 'new-player', 'high-roller') editable per test case, AC6 setup/precondition failures surface in the same review dashboard as Req3 candidates under a distinct 'blocked: setup' bucket, AC7 hard constraint — server-time/feature-flag manipulation only runs against a dedicated non-prod/staging environment, never shared/prod. specs/requirements.md v1.1.
+
+### 2026-10-24T19:01:42Z pm done
+Resolved devops' infra flags as a new Non-Functional/Infra Constraints section: trigger = CI pipeline webhook (manual as secondary); evidence storage = external S3-compatible store with signed links attached to Jira/Xray, 90-day default retention (configurable — flag if compliance needs differ); credentials = secrets manager, service account scoped to issue-create+attach only. specs/requirements.md v1.1.
+
+### 2026-10-24T19:01:42Z pm done
+specs/requirements.md flipped from Draft to 'Approved for design — v1.1': Requirement 5 added, Req2/3/4 extended per above, new Non-Functional section added, Open Questions trimmed to the 4 items that still need a real answer (3 now explicitly assigned for research, see next entry). @dev unblocked — no outstanding blocker on your design.md claim from 2026-10-24T18:54:14Z.
+
+### 2026-10-24T19:01:42Z pm ask
+Before design.md locks, want each of you to pull one market-research thread so we aren't guessing at patterns that already exist — claim yours with `bb log <name> claim` so we don't overlap:
+
+@devops — Xray's own AI ("Sembi IQ") and the Xray-Functionize self-healing integration: how do they handle Xray REST API auth/attachment, and does Functionize's "self-healing" conflict with our transparent-retry requirement (constitution #1, Req2 AC7/AC8)? This decides the Xray/Jira integration-mechanism open question.
+
+@dev — execution-engine options for Requirement 5's device/platform surface: Maestro, Drizz (vision-AI, game-UI specific), Airtest+Poco, AltTester+Appium. Which gets Req1's evidence capture (screenshot/video/log) with the least custom harness work? Feeds the device/emulator-farm sizing too.
+
+@ux — how autonomous bug-report agents (Momentic/Mo, Replay QA, bugAgent) present evidence-backed reports to a human reviewer today: borrow or avoid their patterns for the Req3 dashboard (queue + detail, approve/reject/split).
+
+@qa — how those same tools (Momentic, Replay QA, Xray-Functionize) decide "ambiguous/flaky" vs "real failure": the market default is to confidently guess rather than flag, which is the opposite of constitution #3 — worth confirming none of them have actually solved this before we commit to building Req2 ourselves. Also feeds your "similar failure signature" assignment for Req3.
+
+Post findings as obs/done when ready; I'll fold anything load-bearing into requirements.md or design.md.
+
+### 2026-10-24T19:04:51Z pm warn
+Project directory renamed: MemoryManager -> SanityTesterTool. New root: /Users/yogendrabundela/Documents/GitHub/AI/SanityTesterTool (blackboard, specs, bb all moved with it, same relative layout). Fixed the absolute paths in PROTOCOL.md and registry.md. Your OWN cron job prompt (if you set one per protocol §3) still hardcodes the old /MemoryManager/ path and will fail — recreate it pointing at the new path, same as I just did for mine. Historical mentions in your own wm-log.md are left as-is; not rewriting anyone's log.
+
+### 2026-10-24T19:11:44Z pm done
+All 4 research threads closed (devops: Xray auth+Functionize healing, dev: execution-engine ranking, qa: market ambiguous/flaky scan, ux: dashboard UX patterns). Folded into specs/requirements.md v1.2: (1) Xray/Jira integration mechanism decided = direct Xray Cloud REST API, client_id/secret service-account auth, 24h bearer token + secret rotation policy; (2) Xray-Functionize self-healing risk marked moot (we're not using Functionize as the execution engine); (3) qa's market scan confirms Req2 AC1/AC2 must be built, not bought; (4) ux's dashboard patterns (findings-first queue, jump-to-moment video, informational-only confidence score) noted as design.md guidance for the Req3 dashboard.
+
+### 2026-10-24T19:11:44Z pm ask
+@devops one more fact-check, not research: confirm whether our actual Jira instance is Cloud or Server/DC before you write the integration section of design.md — the Xray Cloud REST API decision I just locked in (requirements.md v1.2, Decided section) assumes Cloud. If it's DC, auth is PAT-based instead and that section needs a variant. Not a blocker to start design.md, just flag the assumption there.
+
+### 2026-10-24T19:11:44Z pm done
+requirements.md flipped Draft->v1.1->now v1.2: Decided section gets 4 new entries (Xray/Jira mechanism+auth, Functionize-risk-moot, market-scan confirmation, dashboard-UX guidance), Open Questions trimmed to 2: (a) game/platform scope for v1 — escalating to the actual product owner now, not blocking design.md since Req5 already makes device/platform an explicit per-run selection; (b) Jira Cloud vs DC confirmation — devops fact-check, also not blocking.
+
+### 2026-10-24T19:11:44Z pm ask
+@dev design.md is fully unblocked now — all 4 of my research asks are in and folded into requirements.md v1.2 (see my last 3 entries). No remaining requirements-level blocker. Go ahead and draft; the 2 open questions left (game/platform scope, Jira Cloud/DC) are explicitly non-blocking and I'll post updates inline if either changes before you get to those sections.
+
+### 2026-10-24T19:21:01Z pm obs
+Got direct stakeholder-interview quotes (product owner, not market research) grounding the constitution. Checked each against specs: all 4 already match existing principles/ACs exactly — (1) 'flag ambiguous, don't claim full automation' = constitution #1/#3, (2) 'separate missing-precondition from real failure, w/ video+logs' = Req2 AC4, (3) 'show exactly what it changed' for preconditions = Req4 AC2, (4) 'XRAY-482 run result+build+video+grouped defect linked back' = Req1 AC5 + Req3 AC2 + constitution #5. No new gaps, no requirements.md changes needed. Added a 'Source' section to specs/constitution.md quoting these so the principles stay traceable to real user need, not just internal reasoning. Does NOT answer the open game/platform-scope question — still waiting on that from the product owner.
+
+### 2026-10-24T19:22:03Z pm reply
+re 2026-10-24T19:18:35Z qa obs + 2026-10-24T19:20:45Z ux obs (passed_after_retry vs forced-ambiguous precedence): DECIDED — ambiguous (Req2 AC9) always wins over passed_after_retry (AC8) when both conditions fire on the same step, never the reverse. Rationale: AC9 exists specifically so a self-heal/adaptation is never a silent pass, and @ux is right that the Grouper only queues failed/ambiguous/blocked:setup — resolving to passed_after_retry would let a self-healed run skip the review queue entirely, which is exactly the anti-pattern constitution #3 and Req2 AC9 were written to prevent. @dev please hard-code this precedence in design.md S2.1/S2.4.
+
+### 2026-10-24T19:22:03Z pm reply
+re 2026-10-24T19:18:42Z qa obs (blocked_reason enum missing evidence-capture-failure bucket): DECIDED — add a 4th blocked_reason value, blocked: evidence-incomplete, distinct from timeout/missing_precondition/setup. Constitution #2: a run without its required evidence is not a usable result regardless of how the run itself went, so evidence-capture tooling failing is its own blocked state, not folded into the other 3.
+
+### 2026-10-24T19:22:03Z pm reply
+re 2026-10-24T19:18:48Z qa obs (DevicePlatformTarget pool vs recorded device): clarify — Req4 AC4 ('recorded values sufficient to recreate the same starting state') and Req5 AC2 ('selected target recorded alongside build metadata') both require the concrete RESOLVED device_id to be written into the run's evidence/build metadata whenever a pool resolves to a specific device at runtime — the pool name alone is not sufficient, since re-running against 'the pool' doesn't guarantee the same device. Record both (pool config used + resolved device_id), not just the pool.
+
+### 2026-10-24T19:22:03Z pm reply
+re 2026-10-24T19:18:55Z qa obs (Drizz self-heal gate: one-time vs per-run): clarify — these are two different checks, design.md should describe both rather than picking one. (a) ONE-TIME integration verification = go/no-go on whether Drizz's API exposes any machine-readable heal signal at all; if it doesn't, Drizz is dropped entirely in favor of Airtest+Poco, full stop. (b) Assuming (a) passes, PER-RUN/PER-CASE runtime detection is the ongoing mechanism (ambiguous flag per Req2 AC9) that checks whether THIS specific run's execution triggered a heal. (a) gates whether Drizz is usable at all; (b) is what actually runs once it's approved. @dev please split S2.2/S5 item 1 into these two explicit mechanisms.
+
+### 2026-10-24T19:22:03Z pm reply
+re 2026-10-24T19:15:35Z ux obs (dismissed candidates resurfacing via auto-match): on a plain reading, Req3 AC5 already prevents this — it only auto-attaches a new failure to an 'already-open candidate or previously filed defect'; a dismissed candidate is neither (it's closed, no Jira ticket), so it doesn't qualify as an auto-attach target under AC5 as written. A new failure matching a dismissed signature should open a FRESH candidate, not reopen the dismissed one — with AC8's match-basis display surfacing the prior dismissal to the reviewer as context. No requirements.md change needed; this is an implementation note for @dev's Grouper (design.md S2.5) to make the exclusion explicit in code rather than leaving it implicit in the AC wording.
+
+### 2026-10-24T19:22:03Z pm obs
+2 outstanding facts I (not research) need to source before design.md's S2.8/S5 items can close: (1) game/platform scope for v1, (2) actual Jira edition (Cloud vs Server/DC) for this org's instance. Chasing both with the product owner now. @devops's Cloud-default-with-documented-DC-fallback posture in design.md stands until I report back on (2); (1) remains non-blocking per Req5's explicit-per-run-selection design.
+
+### 2026-10-24T19:22:30Z pm done
+Reviewed design.md v2. All 5 of my decisions (AC8/AC9 precedence, evidence_incomplete bucket, ResolvedDeviceTarget, Drizz one-time-gate clarification, dismissed-candidate exclusion) are correctly incorporated — checked §2.2 specifically since @qa's concern was easy to misresolve: confirmed per-event self-heal flagging within the chosen engine is retained (every heal event still maps to ambiguous), only cross-engine runtime switching was removed, matching my clarification. No new gaps found. design.md v2 is sign-off-ready pending only the 2 non-blocking open items in S5 (Jira Cloud/DC, game/platform scope) — chasing both with the actual product owner now.
+
+### 2026-10-24T19:27:17Z pm done
+Product owner answered both outstanding facts: (1) v1 platform scope = mobile + PC only, console explicitly excluded; (2) Jira edition = Cloud, confirmed. Updated specs/requirements.md to v1.3 (Open Questions now empty, both moved to Decided) and specs/design.md to v3: §3 DevicePlatformTarget.platform narrowed to mobile-ios|mobile-android|pc; §2.8 Jira Cloud confirmed, no DC/PAT variant needed; §5 open-items list trimmed to just item 1 (Drizz self-heal signal verification — still a real pre-implementation task, not requirements-driven).
+
+### 2026-10-24T19:27:17Z pm done
+requirements.md v1.3: Open Questions section is now empty — spec is fully approved for implementation pending only design.md's remaining engineering task (Drizz API verification, §5 item 1 — @dev/@devops territory, not a PM blocker). No outstanding PM asks on the table. @dev @qa @ux @devops — green light to move from design review to implementation planning whenever you're ready; flag anything new as it comes up.
+
+### 2026-10-24T19:28:47Z pm reply
+re 2026-10-24T19:28:12Z qa reply (stale cross-ref): fixed, requirements.md line 84 no longer points to Open Questions, now cross-refs the Jira-Cloud-confirmed bullet directly. Thanks for catching it.
+
+### 2026-10-24T19:40:09Z pm warn
+Gap: nobody has confirmed basic UI automation feasibility against the actual game's rendered canvas -- only against vendor docs/market claims. @dev's engine research ('Drizz works across Unity/Unreal/Godot/custom by looking at rendered pixels') is Drizz's own marketing claim, not a hands-on test against our build. The only spike currently planned (design.md S5 item 1 / build-order step 3) is scoped to 'does Drizz's API expose a self-heal signal' -- that question presupposes Drizz can already locate/interact with elements on our canvas, which is itself unverified. Same gap applies to Airtest+Poco: its object-level introspection assumes the Poco SDK has a hook into whatever engine/renderer our game actually uses, also unconfirmed.
+
+### 2026-10-24T19:40:09Z pm ask
+@dev @devops proposing a Step-0 spike, ahead of (not instead of) the planned self-heal-signal verification: point each candidate engine (Drizz first, Airtest+Poco second) at an actual build of our actual game and confirm it can (a) locate a known UI element in the rendered canvas, (b) read a displayed value e.g. currency/account-level text, (c) tap/interact and observe the resulting state change, (d) capture a screenshot+short video of that interaction. If Drizz fails basic canvas interaction, the self-heal-signal question for it is moot -- skip straight to Airtest+Poco and spike that instead. This also surfaces which game engine/renderer we're actually targeting (Unity/Unreal/Godot/custom), which I don't see confirmed anywhere either -- @dev do we know that, or is that itself still open? Whoever has access to an actual game build, please claim this -- it's upstream of build-order step 3 and arguably upstream of the whole execution-engine decision in requirements.md's Decided section.
+
+### 2026-10-24T19:42:32Z pm warn
+Critical fact from product owner: the game renders via PixiJS/WebGL (a browser/webview-hosted canvas game, not a native Unity/Unreal/Godot binary). This breaks most of requirements.md's 'Decided' execution-engine section: (1) Airtest+Poco -- Poco's drivers are Android-native/iOS-native/Windows/Unity3D/cocos2d-x ONLY, no PixiJS/WebGL driver exists. The designated fallback-if-Drizz-fails is very likely not viable at all for this game as written. (2) AltTester+Appium -- Unity-only, not applicable. (3) Maestro -- already ruled out, still true, if anything more clearly so (WebGL canvas, same no-accessibility-tree problem). (4) Drizz -- the only one of the 4 that still plausibly applies (vision-AI is engine-agnostic by design), but it was never confirmed against a browser/webview-hosted canvas specifically, only assumed from generic 'works across Unity/Unreal/Godot/custom' vendor language -- still covered by the Step-0 spike I asked for, just now higher-stakes since it may be the ONLY viable option researched so far.
+
+### 2026-10-24T19:42:32Z pm ask
+@dev @qa requirements.md's execution-engine Decided section needs re-research specific to PixiJS/WebGL, not just the Step-0 spike on Drizz. Please research: (a) does Drizz actually support browser/webview targets (vs. only native-app screenshots) -- confirm from their docs, not assume; (b) a PixiJS-native alternative as the REAL fallback if Drizz's self-heal gate fails, since Airtest+Poco almost certainly can't fill that role -- look at Playwright/Puppeteer driving the browser/webview shell + a test-only JS hook the game exposes to query the PixiJS scene graph (object bounds/state) for precise taps, which is the natural equivalent of Poco's object-level introspection for a JS/WebGL game; also check whether any existing PixiJS-specific test tooling exists (e.g. pixi-test, canvas visual-regression tools) before assuming we'd build the JS-hook bridge from scratch. This is more urgent than the self-heal-signal spike since it may mean we have zero fallback currently, not just an unverified primary.
+
+### 2026-10-24T19:42:32Z pm obs
+Also affects @devops's device-farm thinking and Req5's device/platform scope (mobile+PC): a PixiJS/WebGL game running in a browser/webview is likely one codebase across both platforms already, so 'device/platform target' may really mean 'which browser/webview runtime' (mobile Safari/Chrome webview vs. desktop Chrome/Firefox/Edge) more than which OS. Not changing requirements.md yet -- flagging so whoever does the re-research above confirms this rather than assuming device/OS targeting looks the same as a native-app testing setup.
+
+### 2026-10-24T19:51:55Z pm done
+Did the PixiJS/WebGL re-research myself (product owner asked me to go find a solution directly). Findings: (1) Drizz is disqualified on a SECOND, independent ground beyond the canvas question -- it's a mobile-only platform (iOS/Android/mobile-web), no desktop browser support at all, so it literally cannot cover Req5's PC scope regardless of WebGL compatibility; its own marketing is also internally inconsistent about whether 'mobile web' reaches WebGL canvas content. (2) Confirmed via non-vendor sources (ASE 2022 academic paper + its published framework asgaardlab/canvas-visual-bugs-testbed, and PixiJS's own first-party @pixi/devtools package) that there's an established, documented pattern for exactly this stack: expose the live scene graph via globalThis.__PIXI_APP__ = app (one line, same mechanism PixiJS's own inspector uses), look up an object's boundingBox() at runtime (never hardcoded coordinates), convert to canvas-relative coordinates, dispatch a real pointer event. Playwright is the browser driver used for this pattern in the wild.
+
+### 2026-10-24T19:51:55Z pm done
+NEW execution-engine decision (requirements.md v1.4, design.md v6): primary = Playwright (PC, native browser) + Appium WebView-context switching (mobile webview) -- both driving the same PixiJS-scene-graph-lookup + dynamic-coordinate-click technique, the direct equivalent of Poco's object-level introspection but for this game's actual stack. This also structurally resolves Req2 AC9 for free -- no vendor self-healing exists to gate at all, since object resolution is an exact scene-graph match (a missing/renamed object is a clean 'locator not found' failure/ambiguous event, never a silent AI-guessed adaptation). The Drizz self-heal-signal spike is dead; replaced by a lower-risk spike: confirm hands-on that (a) the game team can expose globalThis.__PIXI_APP__ in QA/staging builds, (b) Playwright/Appium can reliably drive pointer/touch events against the real canvas end-to-end on PC + mobile webview. Playwright's built-in screenshot/video/trace recording covers Req1 AC2-3 with no extra harness.
+
+### 2026-10-24T19:51:55Z pm ask
+@dev @devops build-order impact of the engine swap: (1) build-order step 3's 'Drizz self-heal-signal spike' is replaced by the new PixiJS-devtools-hook + Playwright/Appium-reliability spike above -- please update your build order accordingly, it's simpler now (no vendor API to verify, just our own harness against a real build). (2) @devops your device-farm sizing note (S2.2, 'Drizz's managed device cloud may absorb the Req5 device-farm question') no longer applies since Drizz is out -- Appium's WebView-context approach reuses the SAME BrowserStack/AWS-Device-Farm-speaks-Appium story your infra review already flagged as the path of least resistance, so this may actually simplify your sizing work rather than reopen it. (3) @qa your Milestone 1 acceptance-test matrix (8 cases) is unaffected -- it tests Result Processor logic (precedence/enum), not the engine, so it still holds as-is against the new engine. Please review design.md v6 (§2.2, §5, §6) and flag anything off.
+
+### 2026-10-24T19:52:48Z pm done
+Good convergence: @qa's independent desk research (3 findings) matches my synthesis exactly on the hard parts (Drizz has zero PC coverage per its own docs, Airtest+Poco confirmed no WebGL driver, Playwright+scene-graph-hook is a build-not-buy). Folded @qa's one new nuance into requirements.md v1.4/design.md v6: PC is Playwright+hook, mandatory, no off-the-shelf alternative, final. Mobile stays a 2-way open choice, not decided yet -- (a) Appium WebView-context + same scene-graph hook, or (b) Drizz narrowed to mobile-only (vision-AI may dodge @devops's WebKit/mobile-Safari fidelity cost concern since it just reads pixels) -- both gated on the Step-0 spike, pick after. @dev @devops you can stop holding on S2.2/S5/sizing -- requirements.md's Decided section is reworked (v1.4), design.md is v6, matches what you were waiting on.
+
+### 2026-10-24T19:52:48Z pm warn
+Real blocker now: @dev and @devops both confirmed they have no access to an actual game build/staging URL in this environment, so the Step-0 spike (PixiJS devtools hook + Playwright/Appium/Drizz reliability against the real canvas) can't run. This is a resourcing gap, not a research gap -- chasing a real build/staging URL from the product owner now.
+
