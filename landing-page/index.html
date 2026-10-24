@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Witness</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,900;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #F6F5F1;
+    --surface: #FFFFFF;
+    --surface-2: #EFEDE6;
+    --ink: #15181F;
+    --muted: #5B6069;
+    --accent: #A66A1E;
+    --accent-ink: #FFFFFF;
+    --accent-2: #1F6F64;
+    --flag: #A6392A;
+    --ok: #2E7D4F;
+    --line: #DEDAD0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10131A;
+      --surface: #171B24;
+      --surface-2: #1D222C;
+      --ink: #EDEAE2;
+      --muted: #9196A1;
+      --accent: #D9A64B;
+      --accent-ink: #15181F;
+      --accent-2: #54C2B2;
+      --flag: #E2685A;
+      --ok: #4FBE82;
+      --line: #2B303B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10131A;
+    --surface: #171B24;
+    --surface-2: #1D222C;
+    --ink: #EDEAE2;
+    --muted: #9196A1;
+    --accent: #D9A64B;
+    --accent-ink: #15181F;
+    --accent-2: #54C2B2;
+    --flag: #E2685A;
+    --ok: #4FBE82;
+    --line: #2B303B;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', -apple-system, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    padding-inline: 20px;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  .narrow { max-width: 640px; }
+
+  h1, h2, h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    text-wrap: balance;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  h1 { font-weight: 900; }
+  em { font-style: italic; font-family: 'Fraunces', serif; font-weight: 500; }
+
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  a { color: var(--accent-2); }
+
+  /* ---------- Nav ---------- */
+  header.nav {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 14px;
+  }
+  .wordmark {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .wordmark .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 22px; align-items: center; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  @media (max-width: 640px) {
+    .nav-links a:not(.btn-nav) { display: none; }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: none;
+    border-radius: 3px;
+    padding: 10px 18px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding-block: 64px 48px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; padding-block: 36px 32px; }
+  }
+  .hero h1 { font-size: clamp(2.1rem, 4.6vw, 3.2rem); line-height: 1.08; margin-top: 14px; }
+  .hero p.lede { font-size: 1.1rem; color: var(--muted); margin-top: 18px; max-width: 480px; }
+  .hero .cta-row { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+
+  /* ---------- Evidence card ---------- */
+  .card-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: right;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+  }
+  .evidence-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .evidence-head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    background: var(--surface-2);
+  }
+  .evidence-head .build { font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; font-weight: 500; }
+  .evidence-head .plat { font-size: 0.78rem; color: var(--muted); }
+  .erow {
+    padding: 13px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .erow:last-of-type { border-bottom: none; }
+  .erow .id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    min-width: 76px;
+  }
+  .erow .desc { flex: 1; font-size: 0.86rem; min-width: 0; }
+  .erow .desc .sub { display: block; font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+  .pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .pill-retry { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
+  .pill-blocked { background: color-mix(in srgb, var(--flag) 14%, transparent); color: var(--flag); }
+  .pill-ambiguous { background: color-mix(in srgb, var(--flag) 14%, transparent); color: var(--flag); }
+  .evidence-icons { display: flex; gap: 6px; color: var(--muted); font-size: 0.74rem; }
+  .evidence-foot {
+    padding: 11px 18px;
+    background: var(--surface-2);
+    font-size: 0.76rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .evidence-foot .ok-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none;
+  }
+
+  /* ---------- Quote block ---------- */
+  .quote-strip {
+    padding-block: 36px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  blockquote {
+    margin: 0;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    line-height: 1.4;
+    max-width: 760px;
+  }
+  cite {
+    display: block;
+    margin-top: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-style: normal;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ---------- Principles grid ---------- */
+  .section { padding-block: 56px; }
+  .section-head { margin-bottom: 32px; max-width: 620px; }
+  .section-head h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); margin-top: 10px; }
+  .section-head p { color: var(--muted); margin-top: 12px; }
+
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  @media (max-width: 860px) { .principles { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .principles { grid-template-columns: 1fr; } }
+  .principle {
+    background: var(--surface);
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .principle h3 { font-size: 1.12rem; font-weight: 600; margin-top: 2px; }
+  .principle p { color: var(--muted); font-size: 0.89rem; margin: 0; }
+  .principle .src {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ---------- Pipeline ---------- */
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    counter-reset: step;
+  }
+  @media (max-width: 900px) { .pipeline { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .pipeline { grid-template-columns: 1fr; } }
+  .step {
+    counter-increment: step;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px 16px;
+    position: relative;
+  }
+  .step::before {
+    content: counter(step);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 10px;
+  }
+  .step h4 { font-size: 0.92rem; font-weight: 600; margin: 0 0 6px; font-family: 'IBM Plex Sans', sans-serif; }
+  .step p { font-size: 0.8rem; color: var(--muted); margin: 0; }
+
+  /* ---------- Stack strip ---------- */
+  .stack {
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 30px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: center;
+  }
+  @media (max-width: 760px) { .stack { grid-template-columns: 1fr; } }
+  .stack h3 { font-size: 1.3rem; }
+  .stack p { color: var(--muted); margin-top: 10px; font-size: 0.92rem; }
+  .stack-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    color: var(--muted);
+    background: var(--surface);
+  }
+
+  /* ---------- Closing ---------- */
+  .closing {
+    text-align: left;
+    padding-block: 64px 80px;
+  }
+  .closing-card {
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 10px;
+    padding: 44px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  :root:not([data-theme="light"]) .closing-card { background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .closing-card { background: var(--surface-2); color: var(--ink); } }
+  .closing-card h2 { font-size: 1.7rem; max-width: 420px; }
+  .closing .btn { background: var(--accent); color: var(--accent-ink); }
+
+  footer {
+    padding-block: 28px 48px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  footer .mono { font-size: 0.74rem; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="wordmark">Witness <span class="tag">for Xray / Jira</span></div>
+    <nav class="nav-links">
+      <a href="#principles">Principles</a>
+      <a href="#how">How it works</a>
+      <a href="#stack">Your stack</a>
+      <a class="btn btn-nav" href="#talk">Request a walkthrough</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div>
+      <span class="eyebrow">Sanity testing for Xray / Jira</span>
+      <h1>It tells you when it isn't sure.</h1>
+      <p class="lede">Automated sanity runs that flag ambiguous steps and unresolved preconditions instead of guessing — so when it reports a clean pass, that's exactly what happened. Nothing is rounded up.</p>
+      <div class="cta-row">
+        <a class="btn" href="#talk">Request a walkthrough</a>
+        <a class="btn btn-ghost" href="#principles">See how it decides</a>
+      </div>
+    </div>
+    <div>
+      <div class="card-caption">example run report — not live data</div>
+      <div class="evidence-card">
+        <div class="evidence-head">
+          <span class="build mono">Build 4821 &middot; mobile-android &middot; new-player preset</span>
+        </div>
+        <div class="erow">
+          <span class="id mono">XRAY-482</span>
+          <span class="desc">Login &amp; deposit flow<span class="sub">retried once, second attempt clean</span></span>
+          <span class="pill pill-retry">passed after retry</span>
+        </div>
+        <div class="erow">
+          <span class="id mono">XRAY-510</span>
+          <span class="desc">High-roller bonus payout<span class="sub">account level precondition never resolved</span></span>
+          <span class="pill pill-blocked">blocked: missing precondition</span>
+        </div>
+        <div class="erow">
+          <span class="id mono">XRAY-533</span>
+          <span class="desc">Currency switch<span class="sub">step never named a target element</span></span>
+          <span class="pill pill-ambiguous">ambiguous</span>
+        </div>
+        <div class="evidence-foot">
+          <span class="ok-dot"></span>
+          Screenshot &middot; video &middot; logs attached to every row &mdash; reviewed by a human before anything reaches Jira
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote-strip">
+    <blockquote>&ldquo;I'd want it to flag ambiguous cases and give me reliable video/log evidence, not claim full automation.&rdquo;</blockquote>
+    <cite>— stakeholder interview, product constitution §1 / §3</cite>
+  </section>
+
+  <section class="section" id="principles">
+    <div class="section-head">
+      <span class="eyebrow">What it guarantees</span>
+      <h2>Five rules it doesn't bend, even for a cleaner report.</h2>
+      <p>Every run is governed by the same constitution, whether the build is a mobile webview or a PC browser. These aren't aspirations — they're the acceptance criteria the system is built and tested against.</p>
+    </div>
+    <div class="principles">
+      <div class="principle">
+        <span class="eyebrow">Honesty</span>
+        <h3>Never rounds up to a clean pass</h3>
+        <p>If any part of a run was ambiguous, blocked, or required an assumption, the result says so. Partial or uncertain outcomes are reported as partial or uncertain — never dressed up as success.</p>
+      </div>
+      <div class="principle">
+        <span class="eyebrow">Evidence</span>
+        <h3>No result without the receipts</h3>
+        <p>A screenshot at every verification step, a full run video, logs for the run's duration, and build metadata. A result that ships without that evidence isn't considered a usable result at all.</p>
+      </div>
+      <div class="principle">
+        <span class="eyebrow">Control</span>
+        <h3>Game state, set on purpose and on record</h3>
+        <p>Account level, currency, feature flags, server time — set deliberately per run through named presets like <span class="mono">new-player</span> or <span class="mono">high-roller</span>, with the exact applied values recorded alongside the evidence.</p>
+        <p class="src">&ldquo;It needs to show exactly what it changed.&rdquo;</p>
+      </div>
+      <div class="principle">
+        <span class="eyebrow">Review</span>
+        <h3>A human signs off before Jira does</h3>
+        <p>Similar failures are grouped into one evidence-linked candidate defect. A reviewer approves, rejects, or splits it — the system proposes, it never files a ticket unattended.</p>
+      </div>
+      <div class="principle">
+        <span class="eyebrow">Traceability</span>
+        <h3>Every result finds its way back to its case</h3>
+        <p>Run, evidence, and candidate defect all link back to the originating Xray test ID and build number — nothing is reported as a free-floating result disconnected from the case that triggered it.</p>
+        <p class="src">&ldquo;When XRAY-482 fails, I need the result, build number, video, and grouped defect linked back to that case.&rdquo;</p>
+      </div>
+      <div class="principle">
+        <span class="eyebrow">Separation</span>
+        <h3>Bad authoring isn't a product defect</h3>
+        <p>A step with no resolvable target is an authoring gap, not a bug — it's flagged and routed separately, so it never quietly inflates the defect count or masks a real regression.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="section-head">
+      <span class="eyebrow">How a run actually happens</span>
+      <h2>From CI trigger to a filed Jira bug — five steps, all logged.</h2>
+    </div>
+    <div class="pipeline">
+      <div class="step">
+        <h4>Build triggers a run</h4>
+        <p>A CI webhook fires the configured stable test subset against the new build (manual trigger also supported).</p>
+      </div>
+      <div class="step">
+        <h4>Target &amp; state applied</h4>
+        <p>Device/platform and a named precondition preset are resolved from one shared config, then applied and recorded.</p>
+      </div>
+      <div class="step">
+        <h4>Real canvas, real objects</h4>
+        <p>Playwright and Appium drive the actual rendered scene graph directly — object lookup, not pixel-guessing.</p>
+      </div>
+      <div class="step">
+        <h4>Evidence captured</h4>
+        <p>Screenshot per step, full video, logs for the run's duration, and build metadata — every time, pass or fail.</p>
+      </div>
+      <div class="step">
+        <h4>Classify, group, review</h4>
+        <p>Outcomes are never binary. Failures group into candidate defects a human reviews before anything reaches Jira.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="stack">
+    <div class="stack">
+      <div>
+        <span class="eyebrow">Built for the game you actually have</span>
+        <h3>Not a native engine — a WebGL canvas, driven directly.</h3>
+        <p>The game renders through PixiJS/WebGL, not a Unity, Unreal, or Godot binary — so it doesn't rely on an accessibility tree or an engine SDK that doesn't exist for this stack. It reads the live scene graph and clicks real coordinates on real objects, across a mobile webview and a PC browser alike.</p>
+      </div>
+      <div class="stack-tags">
+        <span class="tag">mobile · iOS / Android webview</span>
+        <span class="tag">PC · browser</span>
+        <span class="tag">PixiJS scene graph</span>
+        <span class="tag">no native SDK to embed</span>
+        <span class="tag">Xray Cloud REST API</span>
+        <span class="tag">no self-healing to hide behind</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="talk">
+    <div class="closing-card">
+      <h2>For the people who have to sign off on adopting this.</h2>
+      <a class="btn" href="mailto:qa-tools@example.com?subject=Witness%20walkthrough">Request a walkthrough</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>Witness — an evidence-first sanity tester for Xray &amp; Jira.</span>
+  <span class="mono">specs/constitution.md · specs/requirements.md v1.4</span>
+</footer>
+
+</body>
+</html>
