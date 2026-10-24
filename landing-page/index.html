@@ -371,6 +371,37 @@
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .closing-card { background: var(--surface-2); color: var(--ink); } }
   .closing-card h2 { font-size: 1.7rem; max-width: 420px; }
   .closing .btn { background: var(--accent); color: var(--accent-ink); }
+  .closing-copy { max-width: 420px; }
+  .closing-sub { margin-top: 12px; font-size: 0.92rem; color: color-mix(in srgb, var(--bg) 70%, var(--ink)); }
+  :root:not([data-theme="light"]) .closing-sub { color: var(--muted); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .closing-sub { color: var(--muted); } }
+  .closing-sub a { color: inherit; text-decoration: underline; }
+
+  .waitlist-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .waitlist-form input[type="email"] {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.92rem;
+    padding: 10px 14px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    min-width: 220px;
+  }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .waitlist-msg {
+    margin-top: 14px;
+    font-size: 0.86rem;
+    font-weight: 500;
+  }
 
   footer {
     padding-block: 28px 48px;
@@ -394,7 +425,7 @@
       <a href="#principles">Principles</a>
       <a href="#how">How it works</a>
       <a href="#stack">Your stack</a>
-      <a class="btn btn-nav" href="#talk">Request a walkthrough</a>
+      <a class="btn btn-nav" href="#talk">Join the waitlist</a>
     </nav>
   </div>
 </header>
@@ -407,7 +438,7 @@
       <h1>It tells you when it isn't sure.</h1>
       <p class="lede">Automated sanity runs that flag ambiguous steps and unresolved preconditions instead of guessing — so when it reports a clean pass, that's exactly what happened. Nothing is rounded up.</p>
       <div class="cta-row">
-        <a class="btn" href="#talk">Request a walkthrough</a>
+        <a class="btn" href="#talk">Join the waitlist</a>
         <a class="btn btn-ghost" href="#principles">See how it decides</a>
       </div>
     </div>
@@ -536,9 +567,18 @@
 
   <section class="closing" id="talk">
     <div class="closing-card">
-      <h2>For the people who have to sign off on adopting this.</h2>
-      <a class="btn" href="mailto:qa-tools@example.com?subject=Witness%20walkthrough">Request a walkthrough</a>
+      <div class="closing-copy">
+        <h2>For the people who have to sign off on adopting this.</h2>
+        <p class="closing-sub">Join the waitlist and we'll reach out when there's a build ready to walk through. Prefer email? <a href="mailto:qa-tools@example.com?subject=Witness%20walkthrough">Write to us directly</a> instead.</p>
+      </div>
+      <form class="waitlist-form" id="waitlist-form" method="post" action="/api/waitlist">
+        <label class="sr-only" for="waitlist-email">Work email</label>
+        <input id="waitlist-email" type="email" name="email" placeholder="you@studio.com" required autocomplete="email">
+        <input type="text" name="company_website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
     </div>
+    <p class="waitlist-msg" id="waitlist-msg" role="status" hidden></p>
   </section>
 
 </main>
@@ -548,6 +588,57 @@
   <span class="mono">specs/constitution.md · specs/requirements.md v1.4</span>
   <span><a href="/privacy-policy.html">Privacy Policy</a> &middot; <a href="/terms-of-use.html">Terms of Use</a></span>
 </footer>
+
+<script>
+(function () {
+  try {
+    var form = document.getElementById('waitlist-form');
+    var msg = document.getElementById('waitlist-msg');
+    if (!form || !msg) return;
+
+    function showMsg(text, ok) {
+      msg.textContent = text;
+      msg.hidden = false;
+      msg.style.color = ok ? 'var(--ok)' : 'var(--flag)';
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    if (params.has('waitlist')) {
+      var v = params.get('waitlist');
+      if (v === 'joined') showMsg("You're on the list — we'll be in touch.", true);
+      else if (v === 'existing') showMsg("You're already on the list.", true);
+      else showMsg("That didn't look like a valid email — try again.", false);
+      window.history.replaceState(null, '', window.location.pathname + '#talk');
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = form.email.value.trim();
+      var hp = form.company_website.value;
+      fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email: email, company_website: hp })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.ok) {
+            showMsg(data.status === 'existing' ? "You're already on the list." : "You're on the list — we'll be in touch.", true);
+            form.reset();
+          } else {
+            showMsg("That didn't look like a valid email — try again.", false);
+          }
+        })
+        .catch(function () {
+          // network/CSP blocked the fetch — fall back to a real form submit.
+          // HTMLFormElement.submit() bypasses the 'submit' event, so this
+          // listener doesn't re-fire and loop.
+          form.submit();
+        });
+    });
+  } catch (e) { /* non-fatal: form still works as a plain HTML POST */ }
+})();
+</script>
 
 </body>
 </html>

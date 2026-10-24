@@ -12,3 +12,9 @@ crash.*.log
 
 # OS
 .DS_Store
+
+# Waitlist service — never commit real signup data or a local venv
+waitlist/*.db
+waitlist/*.db-journal
+waitlist/.venv/
+waitlist/__pycache__/
