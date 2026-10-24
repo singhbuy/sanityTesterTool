@@ -1,0 +1,22 @@
+# Witness
+
+> Witness is an evidence-first sanity-test automation tool for QA teams running Xray/Jira test cases against live game builds. It flags ambiguous test steps and unresolved preconditions instead of guessing, captures screenshot/video/log evidence for every run, and requires human review before any Jira defect is filed.
+
+Witness executes a configured stable subset of Xray test cases against mobile (iOS/Android webview) and PC (browser) builds of a PixiJS/WebGL game, driving the live rendered scene graph directly via Playwright and Appium — object lookup against real coordinates, not an accessibility tree or vision-based self-healing. Every result links back to its originating Xray test case ID and build number. Known preconditions (account level, currency, feature flags, server time) are set deliberately per run from a named preset (e.g. "new-player", "high-roller") and the exact applied values are recorded alongside the evidence.
+
+Core guarantees (see the Home page for the full rationale behind each):
+- Never reports an ambiguous, blocked, or assumption-dependent run as a clean pass.
+- No result is reported without screenshot, video, log, and build-metadata evidence.
+- A human reviewer approves, rejects, or splits every candidate defect before a Jira bug is filed — the system proposes, it never files a ticket unattended.
+- Every run, piece of evidence, and candidate defect traces back to its Xray test case ID and build number.
+- A test step with no resolvable target is flagged as an authoring gap, kept separate from real product defects.
+
+## Pages
+
+- [Home](https://bundela.org/): product overview, the five guarantees, and how a run works end to end (CI trigger → precondition setup → scene-graph-driven execution → evidence capture → grouping and human review).
+- [Privacy Policy](https://bundela.org/privacy-policy.html): what this site does and does not collect from visitors.
+- [Terms of Use](https://bundela.org/terms-of-use.html): terms for visiting this site.
+
+## Contact
+
+- qa-tools@example.com — request a walkthrough

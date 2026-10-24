@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Terms of Use — Witness</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,900;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #F6F5F1;
+    --surface: #FFFFFF;
+    --surface-2: #EFEDE6;
+    --ink: #15181F;
+    --muted: #5B6069;
+    --accent: #A66A1E;
+    --accent-2: #1F6F64;
+    --line: #DEDAD0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10131A; --surface: #171B24; --surface-2: #1D222C;
+      --ink: #EDEAE2; --muted: #9196A1; --accent: #D9A64B; --accent-2: #54C2B2; --line: #2B303B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10131A; --surface: #171B24; --surface-2: #1D222C;
+    --ink: #EDEAE2; --muted: #9196A1; --accent: #D9A64B; --accent-2: #54C2B2; --line: #2B303B;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', -apple-system, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    padding-inline: 20px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1, h2 { font-family: 'Fraunces', serif; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  h1 { font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.4rem); }
+  h2 { font-size: 1.2rem; margin-top: 40px; margin-bottom: 10px; }
+  p, li { color: var(--muted); font-size: 0.96rem; }
+  a { color: var(--accent-2); }
+
+  header.nav {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding-block: 14px; max-width: 720px; margin: 0 auto; }
+  .wordmark { font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.15rem; text-decoration: none; color: var(--ink); display: flex; align-items: baseline; gap: 8px; }
+  .wordmark .tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; text-transform: uppercase; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.86rem; font-weight: 500; }
+  .nav-links a:hover { color: var(--ink); }
+
+  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+
+  main { padding-block: 48px 72px; }
+  .updated { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--muted); margin-top: 10px; }
+
+  footer {
+    padding-block: 28px 48px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; color: var(--muted);
+    font-size: 0.78rem; flex-wrap: wrap; gap: 10px; max-width: 720px; margin: 0 auto;
+  }
+  footer .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="wordmark" href="/">Witness <span class="tag">for Xray / Jira</span></a>
+    <nav class="nav-links"><a href="/">&larr; Back to overview</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="eyebrow">Legal</span>
+  <h1>Terms of Use</h1>
+  <p class="updated">Last updated: October 24, 2026 — draft pending legal review before this is treated as final.</p>
+
+  <p>These terms cover your use of <strong>this marketing site</strong> (bundela.org). They do not cover the Witness product itself, which is governed by whatever agreement is in place between its operator and a given customer at the time it's adopted.</p>
+
+  <h2>Informational purpose</h2>
+  <p>Everything on this site — the pitch, the example run report, the pipeline description — is provided for informational purposes to help evaluate the product. The example evidence card on the home page is explicitly marked as illustrative, not live data. Product capabilities are described as designed and may change before or after you adopt it; nothing here is a binding specification or a guarantee of future behavior.</p>
+
+  <h2>No warranty</h2>
+  <p>This site and its content are provided "as is," without warranty of any kind, express or implied, including fitness for a particular purpose. Use of the information here to make an adoption decision is at your own judgment.</p>
+
+  <h2>Acceptable use</h2>
+  <p>You're welcome to read, link to, and share this site, and automated crawlers (including AI assistants) are welcome per <a href="/robots.txt">robots.txt</a> and <a href="/llms.txt">llms.txt</a>. You may not attempt to disrupt, overload, or gain unauthorized access to the site or its hosting infrastructure.</p>
+
+  <h2>Intellectual property</h2>
+  <p>The Witness name, the page design, and the written content on this site belong to its operator unless otherwise credited. The stakeholder quotes referenced on the home page are drawn from the product's own requirements documentation and are used with that context intact.</p>
+
+  <h2>Changes</h2>
+  <p>These terms may be updated as the product and this site evolve; the "last updated" date above will change when they do.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about these terms: <a href="mailto:qa-tools@example.com?subject=Terms%20question">qa-tools@example.com</a></p>
+</main>
+
+<footer>
+  <span>Witness — an evidence-first sanity tester for Xray &amp; Jira.</span>
+  <span class="mono">terms-of-use v0.1 draft</span>
+</footer>
+
+</body>
+</html>

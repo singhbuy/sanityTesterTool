@@ -1,0 +1,7 @@
+# Witness — marketing site for an Xray/Jira sanity-test automation tool.
+# Public pitch content; everything below is fine to crawl and index.
+
+User-agent: *
+Allow: /
+
+# Machine-readable summary for LLMs/AI assistants: /llms.txt

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy Policy — Witness</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,900;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #F6F5F1;
+    --surface: #FFFFFF;
+    --surface-2: #EFEDE6;
+    --ink: #15181F;
+    --muted: #5B6069;
+    --accent: #A66A1E;
+    --accent-2: #1F6F64;
+    --line: #DEDAD0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10131A; --surface: #171B24; --surface-2: #1D222C;
+      --ink: #EDEAE2; --muted: #9196A1; --accent: #D9A64B; --accent-2: #54C2B2; --line: #2B303B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10131A; --surface: #171B24; --surface-2: #1D222C;
+    --ink: #EDEAE2; --muted: #9196A1; --accent: #D9A64B; --accent-2: #54C2B2; --line: #2B303B;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', -apple-system, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    padding-inline: 20px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1, h2 { font-family: 'Fraunces', serif; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  h1 { font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.4rem); }
+  h2 { font-size: 1.2rem; margin-top: 40px; margin-bottom: 10px; }
+  p, li { color: var(--muted); font-size: 0.96rem; }
+  a { color: var(--accent-2); }
+
+  header.nav {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding-block: 14px; max-width: 720px; margin: 0 auto; }
+  .wordmark { font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.15rem; text-decoration: none; color: var(--ink); display: flex; align-items: baseline; gap: 8px; }
+  .wordmark .tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; text-transform: uppercase; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.86rem; font-weight: 500; }
+  .nav-links a:hover { color: var(--ink); }
+
+  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+
+  main { padding-block: 48px 72px; }
+  .updated { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--muted); margin-top: 10px; }
+
+  footer {
+    padding-block: 28px 48px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; color: var(--muted);
+    font-size: 0.78rem; flex-wrap: wrap; gap: 10px; max-width: 720px; margin: 0 auto;
+  }
+  footer .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="wordmark" href="/">Witness <span class="tag">for Xray / Jira</span></a>
+    <nav class="nav-links"><a href="/">&larr; Back to overview</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="eyebrow">Legal</span>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: October 24, 2026 — draft pending legal review before this is treated as final.</p>
+
+  <p>This page covers only <strong>this marketing site</strong> (bundela.org) — not the Witness product itself, which runs inside a customer's own infrastructure under that customer's own policies and is out of scope here.</p>
+
+  <h2>What this site collects</h2>
+  <p>Nothing beyond what any static web page inherently generates. Specifically:</p>
+  <ul>
+    <li>Standard hosting/server logs (IP address, user agent, request timestamp) kept by the hosting and CDN infrastructure for security and reliability purposes.</li>
+    <li>No cookies are set by this site.</li>
+    <li>No analytics, advertising, or third-party tracking scripts are loaded.</li>
+    <li>No forms on this site submit data anywhere. The "Request a walkthrough" link opens your own email client (a <code>mailto:</code> link) — anything you send goes directly through your own email provider, never through this site or its hosting.</li>
+  </ul>
+
+  <h2>Third parties</h2>
+  <p>Fonts are loaded from Google Fonts at page-load time, which may log the request per Google's own policies. No other third-party resource is embedded on this page.</p>
+
+  <h2>Your choices</h2>
+  <p>Since no personal data is collected or stored by this site, there is nothing to access, export, or delete on our end. If you've emailed us directly, that correspondence lives in our inbox like any other email — contact us if you'd like it removed.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this site starts collecting anything beyond the above (e.g. a real contact form, analytics), this page will be updated first and the "last updated" date above will change.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: <a href="mailto:qa-tools@example.com?subject=Privacy%20question">qa-tools@example.com</a></p>
+</main>
+
+<footer>
+  <span>Witness — an evidence-first sanity tester for Xray &amp; Jira.</span>
+  <span class="mono">privacy-policy v0.1 draft</span>
+</footer>
+
+</body>
+</html>
